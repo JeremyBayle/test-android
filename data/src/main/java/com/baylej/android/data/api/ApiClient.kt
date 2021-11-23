@@ -2,6 +2,7 @@ package com.baylej.android.data.api
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -14,7 +15,15 @@ object ApiClient {
     }
 
     private val httpClient : OkHttpClient by lazy {
-        OkHttpClient.Builder().build()
+        OkHttpClient.Builder().apply {
+            addInterceptor(
+                Interceptor { chain ->
+                    val builder = chain.request().newBuilder()
+                    builder.header("app-id", "619bb49361b67cff7298b216")
+                    return@Interceptor chain.proceed(builder.build())
+                }
+            )
+        }.build()
     }
 
     private val retrofit : Retrofit by lazy {
