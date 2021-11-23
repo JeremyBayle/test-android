@@ -1,6 +1,5 @@
 package com.baylej.android.core.model
 
-import android.location.Location
 import java.util.*
 
 data class UserDetails(
