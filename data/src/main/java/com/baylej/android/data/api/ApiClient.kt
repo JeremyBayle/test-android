@@ -6,8 +6,9 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
-object ApiClient {
+object ApiClient{
     private const val BASE_URL: String = "https://dummyapi.io/data/v1/"
 
     private val gson : Gson by lazy {
