@@ -10,7 +10,7 @@ import java.io.IOException
 class UserRepositoryImpl(private val apiService: ApiService) : UserRepository {
     override suspend fun getUsers(): ResultWrapper<List<User>> {
         return safeApiCall(Dispatchers.IO) {
-            apiService.getUsersPreview(100).data.map { elem ->
+            apiService.getUsersPreview(50).data.map { elem ->
                 User(
                     elem.id,
                     elem.title,
