@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.MainActivity">
+    tools:context=".ui.userslist.UsersListActivity">
 
     <androidx.core.widget.ContentLoadingProgressBar
         android:id="@+id/loader"
@@ -18,7 +18,7 @@
         />
     
     <ExpandableListView
-        android:id="@+id/users_list"
+        android:id="@+id/users_expendable_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"

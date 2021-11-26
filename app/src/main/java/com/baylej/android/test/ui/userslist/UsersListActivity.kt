@@ -1,16 +1,16 @@
-package com.baylej.android.test.ui
+package com.baylej.android.test.ui.userslist
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.baylej.android.test.R
+import com.baylej.android.test.ui.userdetail.UserDetailActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class UsersListActivity : AppCompatActivity() {
 
-    private val viewModel: UserListViewModel by viewModels()
+    private val viewModel: UsersListViewModel by viewModels()
 
     private var adapter: UsersListAdapter? = null
 
@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.usersList.observe(this, Observer {users ->
             adapter?.updateUsers(users) ?: run {
                 adapter = UsersListAdapter(this, users)
-                users_list.setAdapter(adapter)
+                users_expendable_list.setAdapter(adapter)
             }
 
         })
@@ -28,5 +28,11 @@ class MainActivity : AppCompatActivity() {
             if (show) loader.show() else loader.hide()
         })
         viewModel.getUsers()
+
+        users_expendable_list.setOnChildClickListener { _, _, listPosition, expandedListPosition, _ ->
+            val user = viewModel.usersList.value?.get(listPosition)?.second?.get(expandedListPosition)
+            UserDetailActivity.startActivity(this, user)
+            true
+        }
     }
 }

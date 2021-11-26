@@ -1,4 +1,4 @@
-package com.baylej.android.test.ui
+package com.baylej.android.test.ui.userslist
 
 import android.view.View
 import android.view.ViewGroup
@@ -61,5 +61,5 @@ class UsersListAdapter(private val context: Context, private var users: List<Pai
         return view
     }
 
-    override fun isChildSelectable(p0: Int, p1: Int): Boolean = true
+    override fun isChildSelectable(listPosition: Int, expandedListPosition: Int): Boolean = true
 }

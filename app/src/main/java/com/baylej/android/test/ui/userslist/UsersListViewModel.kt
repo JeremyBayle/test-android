@@ -1,4 +1,4 @@
-package com.baylej.android.test.ui
+package com.baylej.android.test.ui.userslist
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
@@ -10,9 +10,8 @@ import com.baylej.android.core.usecase.GetUsersUseCase
 import com.baylej.android.data.api.ApiClient
 import com.baylej.android.data.repository.UserRepositoryImpl
 import kotlinx.coroutines.launch
-import java.util.*
 
-class UserListViewModel : ViewModel() {
+class UsersListViewModel : ViewModel() {
 
     private val getUsersUseCase = GetUsersUseCase(UserRepositoryImpl(ApiClient.apiService))
     val usersList: MutableLiveData<List<Pair<Char, List<User>>>> = MutableLiveData()
