@@ -7,13 +7,10 @@ import androidx.lifecycle.viewModelScope
 import com.baylej.android.core.model.ResultWrapper
 import com.baylej.android.core.model.User
 import com.baylej.android.core.usecase.GetUsersUseCase
-import com.baylej.android.data.api.ApiClient
-import com.baylej.android.data.repository.UserRepositoryImpl
 import kotlinx.coroutines.launch
 
-class UsersListViewModel : ViewModel() {
+class UsersListViewModel(private val getUsersUseCase: GetUsersUseCase) : ViewModel() {
 
-    private val getUsersUseCase = GetUsersUseCase(UserRepositoryImpl(ApiClient.apiService))
     val usersList: MutableLiveData<List<Pair<Char, List<User>>>> = MutableLiveData()
     val loading: MutableLiveData<Boolean> = MutableLiveData()
 

@@ -1,7 +1,9 @@
 package com.baylej.android.core.usecase
 
-import com.baylej.android.core.repository.UserRepository
+import com.baylej.android.core.model.ResultWrapper
+import com.baylej.android.core.model.User
 
-class GetUsersUseCase(private val userRepository: UserRepository) {
-    suspend operator fun invoke() = userRepository.getUsers()
+interface GetUsersUseCase {
+
+    suspend operator fun invoke(): ResultWrapper<List<User>>
 }

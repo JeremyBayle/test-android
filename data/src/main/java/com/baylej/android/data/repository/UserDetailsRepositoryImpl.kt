@@ -9,7 +9,7 @@ import com.baylej.android.data.api.ApiService
 import com.baylej.android.data.api.apiCall
 import kotlinx.coroutines.Dispatchers
 
-class UserDetailRepositoryImpl(private val apiService: ApiService): UserDetailsRepository {
+class UserDetailsRepositoryImpl(private val apiService: ApiService): UserDetailsRepository {
     override suspend fun getUserDetails(id: String): ResultWrapper<UserDetails> {
         return apiCall(Dispatchers.IO) {
             val response = apiService.getUserDetail(id)
