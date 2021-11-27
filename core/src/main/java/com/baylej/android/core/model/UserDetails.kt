@@ -1,11 +1,10 @@
 package com.baylej.android.core.model
 
-import java.util.*
 
 data class UserDetails(
     val gender:String,
     val email: String,
-    val dateOfBirth: Date,
+    val dateOfBirth: String,
     val registerDate: String,
     val phone: String,
     val location: Location

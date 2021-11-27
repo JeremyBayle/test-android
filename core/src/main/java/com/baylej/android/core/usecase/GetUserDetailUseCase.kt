@@ -4,5 +4,5 @@ import com.baylej.android.core.repository.UserDetailsRepository
 
 class GetUserDetailUseCase(private val userDetailsRepository: UserDetailsRepository) {
 
-    suspend operator fun invoke() = userDetailsRepository.getUserDetails()
+    suspend operator fun invoke(id: String) = userDetailsRepository.getUserDetails(id)
 }
