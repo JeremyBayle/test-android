@@ -12,7 +12,7 @@ import com.baylej.android.data.api.ApiClient
 import com.baylej.android.data.repository.UserDetailRepositoryImpl
 import kotlinx.coroutines.launch
 
-class UserDetailViewModel(private val user: User?): ViewModel() {
+class UserDetailViewModel(private val user: User): ViewModel() {
 
     private val getUserDetailUseCase = GetUserDetailUseCase(UserDetailRepositoryImpl(ApiClient.apiService))
     val loading: MutableLiveData<Boolean> = MutableLiveData()
@@ -21,18 +21,20 @@ class UserDetailViewModel(private val user: User?): ViewModel() {
     fun getUserDetail() {
         loading.postValue(true)
         viewModelScope.launch {
-            user?.let {
-                when (val result = getUserDetailUseCase(user.id)) {
-                    is ResultWrapper.NetworkError -> Log.e("TEST", "Network unavailable")
-                    is ResultWrapper.ErrorResponse-> Log.e("TEST", "Erreur : " + result.message)
-                    is ResultWrapper.Success -> {
-                        userDetail.postValue(result.value)
-                        loading.postValue(false)
-                    }
+            when (val result = getUserDetailUseCase(user.id)) {
+                is ResultWrapper.NetworkError -> Log.e("TEST", "Network unavailable")
+                is ResultWrapper.ErrorResponse-> Log.e("TEST", "Erreur : " + result.message)
+                is ResultWrapper.Success -> {
+                    userDetail.postValue(result.value)
+                    loading.postValue(false)
                 }
-            } ?: run {
-                // TODO : post error message
             }
         }
     }
+
+    fun userPicture() = user.picture
+    fun userFirstName() = user.firstName
+    fun userLastName() = user.lastName
+    fun userEmail() = userDetail.value?.email
+    fun userPhoneNumber() = userDetail.value?.phone
 }

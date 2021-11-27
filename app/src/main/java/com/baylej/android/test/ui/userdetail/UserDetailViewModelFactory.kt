@@ -16,6 +16,6 @@ class UserDetailViewModelFactory(
         modelClass: Class<T>,
         handle: SavedStateHandle
     ): T {
-        return UserDetailViewModel(defaultArgs?.getSerializable(UserDetailActivity.USER_EXTRA) as User?) as T
+        return UserDetailViewModel(defaultArgs?.getSerializable(UserDetailActivity.USER_EXTRA) as User) as T
     }
 }
