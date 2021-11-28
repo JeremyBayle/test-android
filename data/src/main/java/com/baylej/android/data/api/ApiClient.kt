@@ -8,7 +8,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-class ApiClient{
+class ApiClient(baseUrl: String = "https://dummyapi.io/data/v1/" ){
 
     private val gson : Gson by lazy {
         GsonBuilder().setLenient().create()
@@ -28,7 +28,7 @@ class ApiClient{
 
     private val retrofit : Retrofit by lazy {
         Retrofit.Builder()
-            .baseUrl(Companion.BASE_URL)
+            .baseUrl(baseUrl)
             .client(httpClient)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
@@ -36,9 +36,5 @@ class ApiClient{
 
     val apiService : ApiService by lazy{
         retrofit.create(ApiService::class.java)
-    }
-
-    companion object {
-        private const val BASE_URL: String = "https://dummyapi.io/data/v1/"
     }
 }
