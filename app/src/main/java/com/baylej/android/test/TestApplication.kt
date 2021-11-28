@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import com.baylej.android.core.di.useCaseModules
 import com.baylej.android.core.model.User
 import com.baylej.android.data.di.apiModules
+import com.baylej.android.data.di.databaseModules
 import com.baylej.android.data.di.repositoryModules
 import com.baylej.android.test.ui.userdetail.UserDetailViewModel
 import com.baylej.android.test.ui.userslist.UsersListViewModel
@@ -19,7 +20,11 @@ class TestApplication: Application() {
         super.onCreate()
         startKoin{
             androidContext(this@TestApplication)
-            modules(appModule + apiModules + repositoryModules + useCaseModules)
+            modules(appModule +
+                    apiModules +
+                    repositoryModules +
+                    useCaseModules +
+                    databaseModules)
         }
     }
 }
