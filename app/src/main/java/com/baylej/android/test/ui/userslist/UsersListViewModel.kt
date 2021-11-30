@@ -24,6 +24,10 @@ class UsersListViewModel(private val getUsersUseCase: GetUsersUseCase) : ViewMod
                     usersList.postValue(groupByFirstLetter(result.value).toSortedMap().toList())
                     loading.postValue(false)
                 }
+                is ResultWrapper.CacheData -> {
+                    usersList.postValue(groupByFirstLetter(result.value).toSortedMap().toList())
+                    loading.postValue(false)
+                }
             }
         }
     }

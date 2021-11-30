@@ -32,6 +32,10 @@ class UserDetailViewModel(
                         userDetail.postValue(result.value)
                         loading.postValue(false)
                     }
+                    is ResultWrapper.CacheData -> {
+                        userDetail.postValue(result.value)
+                        loading.postValue(false)
+                    }
                 }
             } ?: run {
                 Log.e("TEST", "Erreur")

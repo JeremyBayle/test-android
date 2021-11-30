@@ -9,7 +9,7 @@ import androidx.room.Query
 interface UserDetailDao {
 
     @Query("SELECT * FROM userdetailentity WHERE userId LIKE :userId")
-    fun findByUserId(userId: String): UserDetailEntity
+    fun findByUserId(userId: String): UserDetailEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertUserDetail(userDetail: UserDetailEntity)

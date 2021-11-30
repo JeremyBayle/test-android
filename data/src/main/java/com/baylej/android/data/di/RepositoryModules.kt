@@ -7,6 +7,6 @@ import com.baylej.android.data.repository.UserRepositoryImpl
 import org.koin.dsl.module
 
 val repositoryModules = module {
-    single<UserRepository> { UserRepositoryImpl(get()) }
+    single<UserRepository> { UserRepositoryImpl(get(), get()) }
     single<UserDetailsRepository> { UserDetailsRepositoryImpl(get()) }
 }
