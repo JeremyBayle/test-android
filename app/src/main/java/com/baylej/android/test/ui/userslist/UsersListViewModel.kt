@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.baylej.android.core.model.ResultWrapper
 import com.baylej.android.core.model.User
+import com.baylej.android.core.repository.RepositoryDataWrapper
 import com.baylej.android.core.usecase.GetUsersUseCase
 import kotlinx.coroutines.launch
 
@@ -18,13 +18,12 @@ class UsersListViewModel(private val getUsersUseCase: GetUsersUseCase) : ViewMod
         loading.postValue(true)
         viewModelScope.launch {
             when (val result = getUsersUseCase()) {
-                is ResultWrapper.NetworkError -> Log.e("TEST", "Network unavailable")
-                is ResultWrapper.ErrorResponse-> Log.e("TEST", "Erreur : " + result.message)
-                is ResultWrapper.Success -> {
+                is RepositoryDataWrapper.Error -> Log.e("TEST", "Network unavailable")
+                is RepositoryDataWrapper.SyncedData -> {
                     usersList.postValue(groupByFirstLetter(result.value).toSortedMap().toList())
                     loading.postValue(false)
                 }
-                is ResultWrapper.CacheData -> {
+                is RepositoryDataWrapper.CacheData -> {
                     usersList.postValue(groupByFirstLetter(result.value).toSortedMap().toList())
                     loading.postValue(false)
                 }

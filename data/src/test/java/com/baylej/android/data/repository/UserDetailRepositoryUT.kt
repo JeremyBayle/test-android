@@ -1,8 +1,7 @@
 package com.baylej.android.data.repository
 
-import com.baylej.android.core.model.ResultWrapper
+import com.baylej.android.core.repository.RepositoryDataWrapper
 import com.baylej.android.core.repository.UserDetailsRepository
-import com.baylej.android.core.repository.UserRepository
 import com.baylej.android.data.base.BaseUT
 import com.baylej.android.data.di.apiModulesTest
 import com.baylej.android.data.di.mockWebServerModuleTest
@@ -39,8 +38,8 @@ class UserDetailRepositoryUT: BaseUT() {
         val repoData = userDetailRepository.getUserDetails(userId)
 
         Assert.assertNotNull(repoData)
-        Assert.assertEquals(true, repoData is ResultWrapper.Success)
-        Assert.assertEquals("sara.andersen@example.com", (repoData as ResultWrapper.Success).value.email)
+        Assert.assertEquals(true, repoData is RepositoryDataWrapper.SyncedData)
+        Assert.assertEquals("sara.andersen@example.com", (repoData as RepositoryDataWrapper.SyncedData).value.email)
         Assert.assertEquals("92694011", repoData.value.phone)
         Assert.assertEquals("Denmark", repoData.value.location.country)
     }
@@ -51,7 +50,8 @@ class UserDetailRepositoryUT: BaseUT() {
         val repoData = userDetailRepository.getUserDetails(userId)
 
         Assert.assertNotNull(repoData)
-        Assert.assertEquals(true, repoData is ResultWrapper.NetworkError)
+        Assert.assertEquals(true, repoData is RepositoryDataWrapper.Error)
+        Assert.assertEquals(-1, (repoData as RepositoryDataWrapper.Error).code)
     }
 
     @Test
@@ -60,7 +60,7 @@ class UserDetailRepositoryUT: BaseUT() {
         val repoData = userDetailRepository.getUserDetails(userId)
 
         Assert.assertNotNull(repoData)
-        Assert.assertEquals(true, repoData is ResultWrapper.ErrorResponse)
-        Assert.assertEquals(403, (repoData as ResultWrapper.ErrorResponse).code)
+        Assert.assertEquals(true, repoData is RepositoryDataWrapper.Error)
+        Assert.assertEquals(403, (repoData as RepositoryDataWrapper.Error).code)
     }
 }

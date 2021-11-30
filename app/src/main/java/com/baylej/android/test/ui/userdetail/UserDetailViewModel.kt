@@ -2,16 +2,12 @@ package com.baylej.android.test.ui.userdetail
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.baylej.android.core.model.ResultWrapper
 import com.baylej.android.core.model.User
 import com.baylej.android.core.model.UserDetails
+import com.baylej.android.core.repository.RepositoryDataWrapper
 import com.baylej.android.core.usecase.GetUserDetailUseCase
-import com.baylej.android.core.usecase.GetUserDetailUseCaseImpl
-import com.baylej.android.data.api.ApiClient
-import com.baylej.android.data.repository.UserDetailsRepositoryImpl
 import kotlinx.coroutines.launch
 
 class UserDetailViewModel(
@@ -26,13 +22,12 @@ class UserDetailViewModel(
         viewModelScope.launch {
             user?.let {
                 when (val result = getUserDetailUseCase(it.id)) {
-                    is ResultWrapper.NetworkError -> Log.e("TEST", "Network unavailable")
-                    is ResultWrapper.ErrorResponse-> Log.e("TEST", "Erreur : " + result.message)
-                    is ResultWrapper.Success -> {
+                    is RepositoryDataWrapper.Error -> Log.e("TEST", "Network unavailable")
+                    is RepositoryDataWrapper.SyncedData -> {
                         userDetail.postValue(result.value)
                         loading.postValue(false)
                     }
-                    is ResultWrapper.CacheData -> {
+                    is RepositoryDataWrapper.CacheData -> {
                         userDetail.postValue(result.value)
                         loading.postValue(false)
                     }

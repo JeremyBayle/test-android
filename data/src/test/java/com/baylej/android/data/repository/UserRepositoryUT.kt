@@ -1,6 +1,6 @@
 package com.baylej.android.data.repository
 
-import com.baylej.android.core.model.ResultWrapper
+import com.baylej.android.core.repository.RepositoryDataWrapper
 import com.baylej.android.core.repository.UserRepository
 import com.baylej.android.data.base.BaseUT
 import com.baylej.android.data.di.apiModulesTest
@@ -37,8 +37,8 @@ class UserRepositoryUT : BaseUT() {
         val repoData = userRepository.getUsers()
 
         Assert.assertNotNull(repoData)
-        Assert.assertEquals(true, repoData is ResultWrapper.Success)
-        Assert.assertEquals(3, (repoData as ResultWrapper.Success).value.count())
+        Assert.assertEquals(true, repoData is RepositoryDataWrapper.SyncedData)
+        Assert.assertEquals(3, (repoData as RepositoryDataWrapper.SyncedData).value.count())
     }
 
     @Test
@@ -47,7 +47,8 @@ class UserRepositoryUT : BaseUT() {
         val repoData = userRepository.getUsers()
 
         Assert.assertNotNull(repoData)
-        Assert.assertEquals(true, repoData is ResultWrapper.NetworkError)
+        Assert.assertEquals(true, repoData is RepositoryDataWrapper.Error)
+        Assert.assertEquals(-1, (repoData as RepositoryDataWrapper.Error).code)
     }
 
     @Test
@@ -56,7 +57,7 @@ class UserRepositoryUT : BaseUT() {
         val repoData = userRepository.getUsers()
 
         Assert.assertNotNull(repoData)
-        Assert.assertEquals(true, repoData is ResultWrapper.ErrorResponse)
-        Assert.assertEquals(403, (repoData as ResultWrapper.ErrorResponse).code)
+        Assert.assertEquals(true, repoData is RepositoryDataWrapper.Error)
+        Assert.assertEquals(403, (repoData as RepositoryDataWrapper.Error).code)
     }
 }

@@ -1,6 +1,7 @@
 package com.baylej.android.data.repository
 
 import com.baylej.android.core.model.*
+import com.baylej.android.core.repository.RepositoryDataWrapper
 import com.baylej.android.core.repository.UserRepository
 import com.baylej.android.data.api.*
 import com.baylej.android.data.database.entity.UserDao
@@ -12,7 +13,7 @@ class UserRepositoryImpl(
     private val apiService: ApiService,
     private val userDao: UserDao) : UserRepository {
 
-    override suspend fun getUsers(): ResultWrapper<List<User>> {
+    override suspend fun getUsers(): RepositoryDataWrapper<List<User>> {
         return withContext(Dispatchers.IO) {
             val result = apiCall(Dispatchers.IO) {
                 apiService.getUsersPreview(100).data.map { elem ->
@@ -36,26 +37,31 @@ class UserRepositoryImpl(
                             elem.picture
                         )
                     })
-                    result
+                    result.toSyncedRepositoryData()
                 }
                 is ResultWrapper.ErrorResponse, ResultWrapper.NetworkError -> {
-                    val users = userDao.getAll().map { elem ->
-                        User(
-                            elem.id,
-                            elem.title,
-                            elem.firstName,
-                            elem.lastName,
-                            elem.picture
-                        )
-                    }
+                    val users = findInLocalDatabase()
                     if (users.isNotEmpty()) {
-                        ResultWrapper.CacheData(users)
+                        RepositoryDataWrapper.CacheData(users)
                     } else {
-                        result
+                        if (result is ResultWrapper.ErrorResponse) {
+                            result.toErrorRepositoryData()
+                        } else {
+                            toErrorRepositoryData()
+                        }
                     }
                 }
-                is ResultWrapper.CacheData -> result
             }
         }
+    }
+
+    private fun findInLocalDatabase(): List<User> = userDao.getAll().map { elem ->
+        User(
+            elem.id,
+            elem.title,
+            elem.firstName,
+            elem.lastName,
+            elem.picture
+        )
     }
 }

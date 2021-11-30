@@ -1,6 +1,5 @@
 package com.baylej.android.data.api
 
-import com.baylej.android.core.model.ResultWrapper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException

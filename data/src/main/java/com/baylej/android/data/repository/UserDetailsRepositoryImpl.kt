@@ -1,11 +1,10 @@
 package com.baylej.android.data.repository
 
 import com.baylej.android.core.model.Location
-import com.baylej.android.core.model.ResultWrapper
 import com.baylej.android.core.model.UserDetails
+import com.baylej.android.core.repository.RepositoryDataWrapper
 import com.baylej.android.core.repository.UserDetailsRepository
-import com.baylej.android.data.api.ApiService
-import com.baylej.android.data.api.apiCall
+import com.baylej.android.data.api.*
 import com.baylej.android.data.database.entity.LocationEntity
 import com.baylej.android.data.database.entity.UserDetailDao
 import com.baylej.android.data.database.entity.UserDetailEntity
@@ -16,7 +15,7 @@ class UserDetailsRepositoryImpl(
     private val apiService: ApiService,
     private val userDetailDao: UserDetailDao): UserDetailsRepository {
 
-    override suspend fun getUserDetails(id: String): ResultWrapper<UserDetails> {
+    override suspend fun getUserDetails(id: String): RepositoryDataWrapper<UserDetails> {
         return withContext(Dispatchers.IO) {
             val result = apiCall(Dispatchers.IO) {
                 val response = apiService.getUserDetail(id)
@@ -56,11 +55,11 @@ class UserDetailsRepositoryImpl(
                             )
                         )
                     }
-                    result
+                    result.toSyncedRepositoryData()
                 }
                 is ResultWrapper.ErrorResponse, ResultWrapper.NetworkError -> {
                     userDetailDao.findByUserId(id)?.let {
-                        ResultWrapper.CacheData(UserDetails(
+                        RepositoryDataWrapper.CacheData(UserDetails(
                             it.gender,
                             it.email,
                             it.dateOfBirth,
@@ -75,10 +74,13 @@ class UserDetailsRepositoryImpl(
                             )
                         ))
                     } ?: kotlin.run {
-                        result
+                        if (result is ResultWrapper.ErrorResponse) {
+                            result.toErrorRepositoryData()
+                        } else {
+                            toErrorRepositoryData()
+                        }
                     }
                 }
-                is ResultWrapper.CacheData -> result
             }
         }
     }

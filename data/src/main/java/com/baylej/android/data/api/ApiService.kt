@@ -1,6 +1,5 @@
 package com.baylej.android.data.api
 
-import com.baylej.android.core.model.ResultWrapper
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
