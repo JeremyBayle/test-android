@@ -6,14 +6,15 @@ import com.baylej.android.core.repository.RepositoryDataWrapper
 import com.baylej.android.core.repository.UserDetailsRepository
 import com.baylej.android.data.api.*
 import com.baylej.android.data.database.entity.LocationEntity
-import com.baylej.android.data.database.entity.UserDetailDao
+import com.baylej.android.data.database.dao.UserDetailDao
 import com.baylej.android.data.database.entity.UserDetailEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class UserDetailsRepositoryImpl(
     private val apiService: ApiService,
-    private val userDetailDao: UserDetailDao): UserDetailsRepository {
+    private val userDetailDao: UserDetailDao
+): UserDetailsRepository {
 
     override suspend fun getUserDetails(id: String): RepositoryDataWrapper<UserDetails> {
         return withContext(Dispatchers.IO) {
