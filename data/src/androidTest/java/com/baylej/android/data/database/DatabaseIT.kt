@@ -1,22 +1,18 @@
 package com.baylej.android.data.database
 
-import androidx.room.Room
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.baylej.android.data.database.dao.UserDao
 import com.baylej.android.data.database.dao.UserDetailDao
-import com.baylej.android.data.database.entity.*
+import com.baylej.android.data.database.entity.LocationEntity
+import com.baylej.android.data.database.entity.UserDetailEntity
+import com.baylej.android.data.database.entity.UserEntity
 import org.junit.After
 import org.junit.Assert
-
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.core.context.loadKoinModules
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
 import org.koin.core.context.unloadKoinModules
-import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
 

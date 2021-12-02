@@ -5,8 +5,8 @@ import com.baylej.android.core.model.UserDetails
 import com.baylej.android.core.repository.RepositoryDataWrapper
 import com.baylej.android.core.repository.UserDetailsRepository
 import com.baylej.android.data.api.*
-import com.baylej.android.data.database.entity.LocationEntity
 import com.baylej.android.data.database.dao.UserDetailDao
+import com.baylej.android.data.database.entity.LocationEntity
 import com.baylej.android.data.database.entity.UserDetailEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

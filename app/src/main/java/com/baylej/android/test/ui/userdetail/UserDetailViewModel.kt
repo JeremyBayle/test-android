@@ -1,6 +1,5 @@
 package com.baylej.android.test.ui.userdetail
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

@@ -1,15 +1,13 @@
 package com.baylej.android.test.ui.userslist
 
+import android.content.Context
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
-import com.baylej.android.core.model.User
-
-import android.content.Context
-
-import android.view.LayoutInflater
 import android.widget.ImageView
 import android.widget.TextView
+import com.baylej.android.core.model.User
 import com.baylej.android.test.R
 import com.baylej.android.test.ui.utils.CircleTransformation
 import com.squareup.picasso.Picasso

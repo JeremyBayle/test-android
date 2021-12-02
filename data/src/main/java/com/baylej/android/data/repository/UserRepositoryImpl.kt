@@ -1,6 +1,6 @@
 package com.baylej.android.data.repository
 
-import com.baylej.android.core.model.*
+import com.baylej.android.core.model.User
 import com.baylej.android.core.repository.RepositoryDataWrapper
 import com.baylej.android.core.repository.UserRepository
 import com.baylej.android.data.api.*
