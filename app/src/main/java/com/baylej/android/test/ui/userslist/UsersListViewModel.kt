@@ -1,6 +1,6 @@
 package com.baylej.android.test.ui.userslist
 
-import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,21 +11,29 @@ import kotlinx.coroutines.launch
 
 class UsersListViewModel(private val getUsersUseCase: GetUsersUseCase) : ViewModel() {
 
-    val usersList: MutableLiveData<List<Pair<Char, List<User>>>> = MutableLiveData()
-    val loading: MutableLiveData<Boolean> = MutableLiveData()
+    var usersList:List<Pair<Char, List<User>>> = listOf()
+        private set
+    private val mutableViewState = MutableLiveData<ViewState<List<Pair<Char, List<User>>>>>()
+    val viewState: LiveData<ViewState<List<Pair<Char, List<User>>>>> = mutableViewState
 
     fun getUsers() {
-        loading.postValue(true)
+        mutableViewState.postValue(ViewState.Loading)
         viewModelScope.launch {
             when (val result = getUsersUseCase()) {
-                is RepositoryDataWrapper.Error -> Log.e("TEST", "Network unavailable")
+                is RepositoryDataWrapper.Error -> {
+                    if (result.code == -1) {
+                        mutableViewState.postValue(ViewState.NetworkError)
+                    } else {
+                        mutableViewState.postValue(ViewState.HttpError(result.code, result.message))
+                    }
+                }
                 is RepositoryDataWrapper.SyncedData -> {
-                    usersList.postValue(groupByFirstLetter(result.value).toSortedMap().toList())
-                    loading.postValue(false)
+                    usersList = groupByFirstLetter(result.value).toSortedMap().toList()
+                    mutableViewState.postValue(ViewState.SyncedDataLoaded(usersList))
                 }
                 is RepositoryDataWrapper.CacheData -> {
-                    usersList.postValue(groupByFirstLetter(result.value).toSortedMap().toList())
-                    loading.postValue(false)
+                    usersList = groupByFirstLetter(result.value).toSortedMap().toList()
+                    mutableViewState.postValue(ViewState.CacheDataLoaded(usersList))
                 }
             }
         }

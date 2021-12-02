@@ -44,7 +44,7 @@ class UsersListAdapter(private val context: Context, private var users: List<Pai
         val view: View = if (convertView == null) {
             val layoutInflater =
                 this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            layoutInflater.inflate(R.layout.list_users_group, null)
+            layoutInflater.inflate(R.layout.list_users_group, parent, false)
         } else {
             convertView
         }
@@ -58,7 +58,7 @@ class UsersListAdapter(private val context: Context, private var users: List<Pai
         val view: View = if (convertView == null) {
             val layoutInflater =
                 this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            layoutInflater.inflate(R.layout.list_users_item, null)
+            layoutInflater.inflate(R.layout.list_users_item, parent, false)
         } else {
             convertView
         }
