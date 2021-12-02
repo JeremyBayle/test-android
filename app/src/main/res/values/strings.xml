@@ -4,4 +4,7 @@
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
     <string name="email">Email</string>
+    <string name="network_error">Network unavailable, please retry later</string>
+    <string name="synchronization_error">Failed to synchronize data, cache data is displayed</string>
+    <string name="http_error">Failed to retrieve data with error : %s</string>
 </resources>

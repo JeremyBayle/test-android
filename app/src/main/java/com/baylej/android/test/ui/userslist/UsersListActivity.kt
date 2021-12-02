@@ -1,7 +1,6 @@
 package com.baylej.android.test.ui.userslist
 
 import android.os.Bundle
-import androidx.lifecycle.Observer
 import com.baylej.android.core.model.User
 import com.baylej.android.test.R
 import com.baylej.android.test.ui.common.BaseActivity
@@ -18,17 +17,18 @@ class UsersListActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        usersListViewModel.viewState.observe(this, Observer {
+        usersListViewModel.viewState.observe(this, {
             when(it) {
                 is ViewState.Loading -> loader.show()
-                is ViewState.NetworkError -> showErrorMessage("Network unavailable, please retry later")
-                is ViewState.HttpError -> showErrorMessage(it.message + " / " + it.code)
+                is ViewState.NetworkError -> showErrorMessage(getString(R.string.network_error), users_expendable_list)
+                is ViewState.HttpError -> showErrorMessage(getString(R.string.http_error,
+                    it.message + " / " + it.code), users_expendable_list)
                 is ViewState.SyncedDataLoaded -> {
                     configureUsersList(it.data)
                 }
                 is ViewState.CacheDataLoaded -> {
                     configureUsersList(it.data)
-                    showErrorMessage("Failed to synchronize data, cache data is displayed")
+                    showErrorMessage(getString(R.string.synchronization_error), users_expendable_list)
                 }
             }
             if (it !is ViewState.Loading) {

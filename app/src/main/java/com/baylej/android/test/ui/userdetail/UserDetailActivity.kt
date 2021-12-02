@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.widget.TextView
 import com.baylej.android.core.model.User
 import com.baylej.android.core.model.UserDetails
@@ -25,16 +26,19 @@ class UserDetailActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_detail)
+        val contentView: View = findViewById(android.R.id.content)
         userDetailViewModel.viewState.observe(this) {
             when(it) {
-                is ViewState.NetworkError -> showErrorMessage("Network unavailable, please retry later")
-                is ViewState.HttpError -> showErrorMessage(it.message + " / " + it.code)
+                is ViewState.NetworkError -> showErrorMessage(getString(R.string.network_error),
+                    contentView)
+                is ViewState.HttpError -> showErrorMessage(getString(R.string.http_error,
+                    it.message + " / " + it.code), contentView)
                 is ViewState.SyncedDataLoaded -> {
                     updateUI(it.data.first, it.data.second)
                 }
                 is ViewState.CacheDataLoaded -> {
                     updateUI(it.data.first, it.data.second)
-                    showErrorMessage("Failed to synchronize data, cache data is displayed")
+                    showErrorMessage(getString(R.string.synchronization_error), contentView)
                 }
                 ViewState.Loading -> loader.show()
             }
