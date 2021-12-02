@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.baylej.android.core.model.User
 import com.baylej.android.core.repository.RepositoryDataWrapper
 import com.baylej.android.core.usecase.GetUsersUseCase
+import com.baylej.android.test.ui.common.ViewState
+import com.baylej.android.test.ui.common.toViewState
 import kotlinx.coroutines.launch
 
 class UsersListViewModel(private val getUsersUseCase: GetUsersUseCase) : ViewModel() {
@@ -21,11 +23,7 @@ class UsersListViewModel(private val getUsersUseCase: GetUsersUseCase) : ViewMod
         viewModelScope.launch {
             when (val result = getUsersUseCase()) {
                 is RepositoryDataWrapper.Error -> {
-                    if (result.code == -1) {
-                        mutableViewState.postValue(ViewState.NetworkError)
-                    } else {
-                        mutableViewState.postValue(ViewState.HttpError(result.code, result.message))
-                    }
+                    result.toViewState(result.code, result.message)
                 }
                 is RepositoryDataWrapper.SyncedData -> {
                     usersList = groupByFirstLetter(result.value).toSortedMap().toList()

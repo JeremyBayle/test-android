@@ -1,6 +1,7 @@
 package com.baylej.android.test.ui.userdetail
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,39 +9,38 @@ import com.baylej.android.core.model.User
 import com.baylej.android.core.model.UserDetails
 import com.baylej.android.core.repository.RepositoryDataWrapper
 import com.baylej.android.core.usecase.GetUserDetailUseCase
+import com.baylej.android.test.ui.common.ViewState
+import com.baylej.android.test.ui.common.toViewState
 import kotlinx.coroutines.launch
 
 class UserDetailViewModel(
-    private val user: User?,
+    private val user: User,
     private val getUserDetailUseCase: GetUserDetailUseCase): ViewModel() {
 
-    val loading: MutableLiveData<Boolean> = MutableLiveData()
-    val userDetail: MutableLiveData<UserDetails> = MutableLiveData()
+    private var userDetails: UserDetails? = null
+
+    private val mutableViewState = MutableLiveData<ViewState<Pair<User,UserDetails>>>()
+    val viewState: LiveData<ViewState<Pair<User,UserDetails>>> = mutableViewState
 
     fun getUserDetail() {
-        loading.postValue(true)
+        mutableViewState.postValue(ViewState.Loading)
         viewModelScope.launch {
-            user?.let {
-                when (val result = getUserDetailUseCase(it.id)) {
-                    is RepositoryDataWrapper.Error -> Log.e("TEST", "Network unavailable")
-                    is RepositoryDataWrapper.SyncedData -> {
-                        userDetail.postValue(result.value)
-                        loading.postValue(false)
-                    }
-                    is RepositoryDataWrapper.CacheData -> {
-                        userDetail.postValue(result.value)
-                        loading.postValue(false)
-                    }
+            when (val result = getUserDetailUseCase(user.id)) {
+                is RepositoryDataWrapper.Error -> {
+                        mutableViewState.postValue(result.toViewState(result.code, result.message))
                 }
-            } ?: run {
-                Log.e("TEST", "Erreur")
+                is RepositoryDataWrapper.SyncedData -> {
+                    userDetails = result.value
+                    mutableViewState.postValue(ViewState.SyncedDataLoaded(Pair(user, result.value)))
+                }
+                is RepositoryDataWrapper.CacheData -> {
+                    userDetails = result.value
+                    mutableViewState.postValue(ViewState.CacheDataLoaded(Pair(user,result.value)))
+                }
             }
         }
     }
 
-    fun userPicture() = user?.picture
-    fun userFirstName() = user?.firstName
-    fun userLastName() = user?.lastName
-    fun userEmail() = userDetail.value?.email
-    fun userPhoneNumber() = userDetail.value?.phone
+    fun userEmail() = userDetails?.email
+    fun userPhoneNumber() = userDetails?.phone
 }
