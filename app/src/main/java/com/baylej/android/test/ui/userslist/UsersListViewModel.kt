@@ -23,7 +23,7 @@ class UsersListViewModel(private val getUsersUseCase: GetUsersUseCase) : ViewMod
         viewModelScope.launch {
             when (val result = getUsersUseCase()) {
                 is RepositoryDataWrapper.Error -> {
-                    result.toViewState(result.code, result.message)
+                    toViewState(result.code, result.message)
                 }
                 is RepositoryDataWrapper.SyncedData -> {
                     usersList = groupByFirstLetter(result.value).toSortedMap().toList()

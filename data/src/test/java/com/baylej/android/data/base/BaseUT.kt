@@ -22,7 +22,7 @@ abstract class BaseUT  : KoinTest {
             .setResponseCode(responseCode)
             .setBody(getJson(fileName)))
 
-    fun getJson(path : String) : String {
+    private fun getJson(path : String) : String {
         val uri = javaClass.classLoader!!.getResource(path)
         val file = File(uri.path)
         return String(file.readBytes())

@@ -26,7 +26,7 @@ class UserDetailViewModel(
         viewModelScope.launch {
             when (val result = getUserDetailUseCase(user.id)) {
                 is RepositoryDataWrapper.Error -> {
-                        mutableViewState.postValue(result.toViewState(result.code, result.message))
+                        mutableViewState.postValue(toViewState(result.code, result.message))
                 }
                 is RepositoryDataWrapper.SyncedData -> {
                     userDetails = result.value
